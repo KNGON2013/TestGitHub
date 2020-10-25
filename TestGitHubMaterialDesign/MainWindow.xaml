@@ -1,20 +1,21 @@
-﻿<Window x:Class="TestGitHub.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TestGitHub.Views"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:vb="clr-namespace:TestGitHub.Views.Behaviors"
-        xmlns:dataContext="clr-namespace:TestGitHub.ViewModels"
-        xmlns:template="clr-namespace:TestGitHub.Libraries.Templates"
-        xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
-        mc:Ignorable="d"
-        Title="{Binding Title}" Height="500" Width="800">
+﻿<metro:MetroWindow x:Class="TestGitHubMaterialDesign.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:local="clr-namespace:TestGitHubMaterialDesign"
+                   xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                   xmlns:vb="clr-namespace:TestGitHub.Views.Behaviors;assembly=TestGitHub"
+                   xmlns:dataContext="clr-namespace:TestGitHub.ViewModels;assembly=TestGitHub"
+                   xmlns:template="clr-namespace:TestGitHub.Libraries.Templates;assembly=TestGitHub"
+                   xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
+                   mc:Ignorable="d"
+                   Title="{Binding Title}" Height="500" Width="820">
     <i:Interaction.Behaviors>
         <vb:MainWindowBehavior/>
     </i:Interaction.Behaviors>
-    
+
     <Window.DataContext>
         <dataContext:MainWindowDataContext/>
     </Window.DataContext>
@@ -47,36 +48,47 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="26"/>
-        </Style>
-
-        <Style TargetType="CheckBox">
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="{x:Type Control}" x:Key="baseStyle">
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource baseStyle}">
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="250"/>
         </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15,2"/>
+        </Style>
+
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource  MaterialDesignUserForegroundCheckBox}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <!--
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource  MaterialDesignSwitchAccentToggleButton}">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource  MaterialDesignUserForegroundCheckBox}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignActionAccentCheckBox}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MahApps.Styles.CheckBox}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        -->
+        
     </Window.Resources>
-    
+
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal"
                     VerticalAlignment="Center">
             <Button Command="{Binding CommandTestBoolToValueConverter}"
                     Content="BoolToValueConverter テスト"/>
-            
+
             <CheckBox Content="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToString}}"
                       IsChecked="{Binding IsBoolToValueConverter}"
                       Background="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToBrush}}"/>
@@ -84,6 +96,9 @@
             <CheckBox Content="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToString}}"
                       IsChecked="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToNBoolReverse}}"
                       Background="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToBrush}}"/>
+
+            <CheckBox Content="{Binding IsBoolToValueConverter, Converter={StaticResource BoolToString}}"
+                      IsChecked="{Binding IsBoolToValueConverter}"/>
         </StackPanel>
 
         <mwt:ClassicBorderDecorator DockPanel.Dock="Top">
@@ -118,37 +133,13 @@
             </mwt:ClassicBorderDecorator>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-            <mwt:ClassicBorderDecorator>
-                <TextBlock Text="バリデーション(double)" Width="150"/>
-            </mwt:ClassicBorderDecorator>
-
-            <TextBox Width="150"
-                 Text="{Binding ValidationDouble, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}">
-
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewTextInput">
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="IsAllowedNumericalInput"/>
-                    </i:EventTrigger>
-
-                    <i:EventTrigger EventName="MouseWheel">
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="MouseWheel"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <mwt:ClassicBorderDecorator>
-                <TextBlock Text="{Binding ValidationDouble}" Width="150"/>
-            </mwt:ClassicBorderDecorator>
-        </StackPanel>
-
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal"
                     VerticalAlignment="Center">
             <Button Command="{Binding CommandTestDialog}"
                     Width="156"
                     Content="ダイアログ表示 テスト"/>
-            
+
             <Button Command="{Binding CommandTestFolder}"
                     Width="151"
                     Content="フォルダ選択 テスト"/>
@@ -182,7 +173,7 @@
                     <Setter Property="Command" Value="{Binding CommandItemsSort}"/>
                 </Style>
             </ListView.Resources>
-            
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -214,7 +205,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="165" Header="Pref">
+                    <GridViewColumn Width="200" Header="Pref">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ListBox ItemsSource="{Binding Prefs}" VerticalAlignment="Center" VerticalContentAlignment="Center">
@@ -235,10 +226,8 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-
                 </GridView>
             </ListView.View>
         </ListView>
     </DockPanel>
-    
-</Window>
+</metro:MetroWindow>
