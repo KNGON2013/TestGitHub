@@ -16,15 +16,15 @@ namespace TestGitHub.Libraries.Templates
 
         public RelayCommand(Action action, Predicate<object> canAction)
         {
-            execute = action ?? throw new ArgumentNullException(nameof(action));
-            canExecute = canAction;
+            this.execute = action ?? throw new ArgumentNullException(nameof(action));
+            this.canExecute = canAction;
         }
 
         public event EventHandler CanExecuteChanged
         {
             add
             {
-                if (canExecute != null)
+                if (this.canExecute != null)
                 {
                     CommandManager.RequerySuggested += value;
                 }
@@ -32,7 +32,7 @@ namespace TestGitHub.Libraries.Templates
 
             remove
             {
-                if (canExecute != null)
+                if (this.canExecute != null)
                 {
                     CommandManager.RequerySuggested -= value;
                 }
@@ -41,17 +41,17 @@ namespace TestGitHub.Libraries.Templates
 
         public bool CanExecute(object parameter)
         {
-            return canExecute == null || canExecute(parameter);
+            return this.canExecute == null || this.canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
-            execute();
+            this.execute();
         }
 
         public void Execute()
         {
-            execute();
+            this.execute();
         }
     }
 }

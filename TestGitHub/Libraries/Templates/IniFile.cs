@@ -17,7 +17,7 @@ namespace TestGitHub.Libraries.Templates
 
         public IniFile(string filePath)
         {
-            FilePath = filePath;
+            this.FilePath = filePath;
         }
 
         public string FilePath { get; private set; }
@@ -25,13 +25,13 @@ namespace TestGitHub.Libraries.Templates
         public string GetString(string section, string key, string defaultValue = "")
         {
             var sb = new StringBuilder(1024);
-            GetPrivateProfileString(section, key, defaultValue, sb, (uint)sb.Capacity, FilePath);
+            GetPrivateProfileString(section, key, defaultValue, sb, (uint)sb.Capacity, this.FilePath);
             return sb.ToString();
         }
 
         public bool WriteString(string section, string key, string value)
         {
-            return WritePrivateProfileString(section, key, value, FilePath);
+            return WritePrivateProfileString(section, key, value, this.FilePath);
         }
     }
 }

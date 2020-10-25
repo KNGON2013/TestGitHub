@@ -24,18 +24,18 @@ namespace TestGitHub.Libraries.Templates
         {
             if (value == null)
             {
-                return FalseValue;
+                return this.FalseValue;
             }
             else
             {
-                return (bool)value ? TrueValue : FalseValue;
+                return (bool)value ? this.TrueValue : this.FalseValue;
             }
         }
 
         /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value != null && value.Equals(TrueValue);
+            return value != null && value.Equals(this.TrueValue);
         }
     }
 

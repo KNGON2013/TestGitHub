@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -28,75 +30,112 @@ namespace TestGitHub.Models
 
         private byte bitmapCounter;
 
+        private byte[] bitmapBGRA32;
+
+        private byte[] tempBGRA32;
+
+        private int bitmapWidth;
+
+        private int bitmapHeight;
+
         public MainWindow()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
             var version = assembly.Version;
 
-            defaultTitle = $"{assembly.Name} {version.Major}.{version.Minor}.{version.Build}";
-            Title = defaultTitle;
+            this.defaultTitle = $"{assembly.Name} {version.Major}.{version.Minor}.{version.Build}";
+            this.Title = this.defaultTitle;
 
-            var dispatcher = new DispatcherTimer()
+            var path = Environment.CurrentDirectory + "\\Lenna.jpg";
+            if (File.Exists(path))
             {
-                Interval = TimeSpan.FromMilliseconds(100),
-            };
+                var bitmap = new Bitmap(Image.FromFile(path));
+                this.ImageBitmapSource = BitmapSourceConverter.ToBetterBitmapSource(bitmap);
 
-            dispatcher.Tick += ((sender, e) =>
+                this.bitmapBGRA32 = BitmapSourceConverter.ToBytesBGRA32(this._ImageBitmapSource);
+                this.bitmapWidth = bitmap.Width;
+                this.bitmapHeight = bitmap.Height;
+                this.tempBGRA32 = new byte[this.bitmapBGRA32.Length];
+
+                Debug.WriteLine($"{this.bitmapBGRA32.Length} {this.bitmapWidth} {this.bitmapHeight}");
+
+                var dispatcher = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromMilliseconds(50),
+                };
+
+                dispatcher.Tick += ((sender, e) =>
+                {
+                    this.ImageBitmapSource = this.DrawLenna();
+                });
+
+                dispatcher.Start();
+            }
+            else
             {
-                ImageBitmapSource = DrawSample();
-            });
+                var dispatcher = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromMilliseconds(100),
+                };
 
-            dispatcher.Start();
+                dispatcher.Tick += ((sender, e) =>
+                {
+                    this.ImageBitmapSource = this.DrawSample();
+                });
+
+                dispatcher.Start();
+            }
+
         }
 
         private string _Title;
         public string Title
         {
-            get => _Title;
-            set => RaisePropertyChangedIfSet(ref _Title, value, nameof(Title));
+            get => this._Title;
+            set => this.RaisePropertyChangedIfSet(ref this._Title, value, nameof(this.Title));
         }
 
         private bool _EnableCommand = true;
         public bool EnableCommand
         {
-            get => _EnableCommand;
-            set => RaisePropertyChangedIfSet(ref _EnableCommand, value, nameof(EnableCommand));
+            get => this._EnableCommand;
+            set => this.RaisePropertyChangedIfSet(ref this._EnableCommand, value, nameof(this.EnableCommand));
         }
 
-        public IEnumerable<Item> Items => items;
+        public IEnumerable<Item> Items => this.items;
 
         private BitmapSource _ImageBitmapSource;
         public BitmapSource ImageBitmapSource
         {
-            get => _ImageBitmapSource;
-            set => RaisePropertyChangedIfSet(ref _ImageBitmapSource, value, nameof(ImageBitmapSource));
+            get => this._ImageBitmapSource;
+            set => this.RaisePropertyChangedIfSet(ref this._ImageBitmapSource, value, nameof(this.ImageBitmapSource));
         }
 
         private bool _IsBoolToValueConverter;
         public bool IsBoolToValueConverter
         {
-            get => _IsBoolToValueConverter;
-            set => RaisePropertyChangedIfSet(ref _IsBoolToValueConverter, value, nameof(IsBoolToValueConverter));
+            get => this._IsBoolToValueConverter;
+            set => this.RaisePropertyChangedIfSet(ref this._IsBoolToValueConverter, value, nameof(this.IsBoolToValueConverter));
         }
 
         private string _ViewSizeChanged;
         public string ViewSizeChanged
         {
-            get => _ViewSizeChanged;
-            set => RaisePropertyChangedIfSet(ref _ViewSizeChanged, value, nameof(ViewSizeChanged));
+            get => this._ViewSizeChanged;
+            set => this.RaisePropertyChangedIfSet(ref this._ViewSizeChanged, value, nameof(this.ViewSizeChanged));
         }
 
         private int _ValidationInteger;
         public int ValidationInteger
         {
-            get => _ValidationInteger;
-            set => RaisePropertyChangedIfSet(ref _ValidationInteger, value, nameof(ValidationInteger));
+            get => this._ValidationInteger;
+            set => this.RaisePropertyChangedIfSet(ref this._ValidationInteger, value, nameof(this.ValidationInteger));
         }
 
         private double _ValidationDouble;
         public double ValidationDouble
         {
-            get => _ValidationDouble;
+            get => this._ValidationDouble;
             set
             {
                 if (value < -100)
@@ -104,54 +143,54 @@ namespace TestGitHub.Models
                     throw new ArgumentException();
                 }
 
-                RaisePropertyChangedIfSet(ref _ValidationDouble, value, nameof(ValidationDouble));
+                this.RaisePropertyChangedIfSet(ref this._ValidationDouble, value, nameof(this.ValidationDouble));
             }
         }
 
         private string _ViewLocationChanged;
         public string ViewLocationChanged
         {
-            get => _ViewLocationChanged;
-            set => RaisePropertyChangedIfSet(ref _ViewLocationChanged, value, nameof(ViewLocationChanged));
+            get => this._ViewLocationChanged;
+            set => this.RaisePropertyChangedIfSet(ref this._ViewLocationChanged, value, nameof(this.ViewLocationChanged));
         }
 
         private ICommand _CommandTestBoolToValueConverter;
-        public ICommand CommandTestBoolToValueConverter => _CommandTestBoolToValueConverter ??= new RelayCommand(() =>
+        public ICommand CommandTestBoolToValueConverter => this._CommandTestBoolToValueConverter ??= new RelayCommand(() =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
-            IsBoolToValueConverter = !_IsBoolToValueConverter;
+            this.IsBoolToValueConverter = !this._IsBoolToValueConverter;
         });
 
         private ICommand _CommandAdd;
         public ICommand CommandAdd =>
-            _CommandAdd ??= new RelayCommand(() =>
+            this._CommandAdd ??= new RelayCommand(() =>
             {
                 Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
-                items.Add(new Item()
+                this.items.Add(new Item()
                 {
-                    Header = $"No.{items.Count}",
+                    Header = $"No.{this.items.Count}",
                     Percentage = 0,
                 });
             });
 
         private ICommand _CommandRun;
         public ICommand CommandRun =>
-            _CommandRun ??= new RelayCommand(async () =>
+            this._CommandRun ??= new RelayCommand(async () =>
             {
                 Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
-                EnableCommand = false;
+                this.EnableCommand = false;
 
-                cts = new CancellationTokenSource();
+                this.cts = new CancellationTokenSource();
 
-                var token = cts.Token;
+                var token = this.cts.Token;
                 var tasks = GetTasks(token);
 
                 IEnumerable<Task> GetTasks(CancellationToken token)
                 {
-                    for (int i = 0; i < items.Count; i++)
+                    for (int i = 0; i < this.items.Count; i++)
                     {
-                        yield return items[i].RunAsync(i + 1, token);
+                        yield return this.items[i].RunAsync(i + 1, token);
                     }
                 }
 
@@ -160,8 +199,8 @@ namespace TestGitHub.Models
                 {
                     Debug.WriteLine("ContinueWith.");
 
-                    cts.Dispose();
-                    cts = null;
+                    this.cts.Dispose();
+                    this.cts = null;
 
                     if (_.IsCanceled)
                     {
@@ -170,23 +209,23 @@ namespace TestGitHub.Models
                 });
 
                 Debug.WriteLine("End");
-                EnableCommand = true;
+                this.EnableCommand = true;
             });
 
         private ICommand _CommandCancel;
         public ICommand CommandCancel =>
-            _CommandCancel ??= new RelayCommand(() =>
+            this._CommandCancel ??= new RelayCommand(() =>
             {
                 Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
-                if (cts != null)
+                if (this.cts != null)
                 {
-                    cts.Cancel();
+                    this.cts.Cancel();
                 }
             });
 
         private ICommand _CommandDeviceChanged;
-        public ICommand CommandDeviceChanged => _CommandDeviceChanged ??= new RelayCommand(async () =>
+        public ICommand CommandDeviceChanged => this._CommandDeviceChanged ??= new RelayCommand(async () =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
@@ -205,25 +244,25 @@ namespace TestGitHub.Models
         });
 
         private ICommand _CommandSizeChanged;
-        public ICommand CommandSizeChanged => _CommandSizeChanged ??= new RelayCommand<int>((_) =>
+        public ICommand CommandSizeChanged => this._CommandSizeChanged ??= new RelayCommand<int>((_) =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
             var x = _ & 0xffff;
             var y = (_ >> 16) & 0xffff;
-            ViewSizeChanged = $"{x} {y}";
+            this.ViewSizeChanged = $"{x} {y}";
         });
 
         private ICommand _CommandLocationChanged;
-        public ICommand CommandLocationChanged => _CommandLocationChanged ??= new RelayCommand<int>((_) =>
+        public ICommand CommandLocationChanged => this._CommandLocationChanged ??= new RelayCommand<int>((_) =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
             var x = _ & 0xffff;
             var y = (_ >> 16) & 0xffff;
-            ViewLocationChanged = $"{x} {y}";
+            this.ViewLocationChanged = $"{x} {y}";
         });
 
         private ICommand _CommandClosed;
-        public ICommand CommandClosed => _CommandClosed ??= new RelayCommand(() =>
+        public ICommand CommandClosed => this._CommandClosed ??= new RelayCommand(() =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
@@ -239,8 +278,8 @@ namespace TestGitHub.Models
             var pixels = new byte[pixelsSize];
 
             // バイト列に色情報を入れる
-            byte value = bitmapCounter;
-            bitmapCounter++;
+            byte value = this.bitmapCounter;
+            this.bitmapCounter++;
 
             for (var x = 0; x < width * height * 4; x += 4)
             {
@@ -266,6 +305,34 @@ namespace TestGitHub.Models
 
             var temp = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, pixels, stride);
             temp.Freeze();
+
+            return temp;
+        }
+
+        private BitmapSource DrawLenna()
+        {
+            var width = this.bitmapWidth;
+            var height = this.bitmapHeight;
+
+            var pixelsSize = this.bitmapBGRA32.Length;
+
+            Buffer.BlockCopy(this.bitmapBGRA32, 0, this.tempBGRA32, 0, pixelsSize);
+
+            // バイト列に色情報を入れる
+            byte value = this.bitmapCounter;
+            this.bitmapCounter++;
+
+            for (var x = 0; x < width * height * 4; x += 4)
+            {
+                byte alpha = value;
+                this.tempBGRA32[x + 3] = alpha;
+            }
+
+            var stride = ((width * PixelFormats.Pbgra32.BitsPerPixel) + 7) / 8; // 一行あたりのバイトサイズ
+
+            var temp = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, this.tempBGRA32, stride);
+            temp.Freeze();
+
             return temp;
         }
     }

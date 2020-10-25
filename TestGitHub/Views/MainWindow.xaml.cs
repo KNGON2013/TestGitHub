@@ -9,7 +9,7 @@ namespace TestGitHub.Views
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

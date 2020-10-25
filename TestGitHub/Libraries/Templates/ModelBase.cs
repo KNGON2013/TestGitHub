@@ -30,7 +30,7 @@ namespace TestGitHub.Libraries.Templates
             }
 
             source = value;
-            RaisePropertyChanged(propertyName);
+            this.RaisePropertyChanged(propertyName);
             return true;
         }
 

@@ -24,10 +24,10 @@ namespace TestGitHub.Libraries.Devices.ComPort
                 return string.Empty;
             }
 
-            Name = caption;
+            this.Name = caption;
             if (int.TryParse(FuncGetPort(caption), out var result))
             {
-                Index = result;
+                this.Index = result;
             }
         }
 

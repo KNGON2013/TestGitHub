@@ -9,17 +9,17 @@ namespace TestGitHub.Views
     {
         public ErrorDialog()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            buttonOK.Focus();
+            this.buttonOK.Focus();
         }
     }
 }

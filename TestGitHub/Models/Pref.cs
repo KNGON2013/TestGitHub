@@ -7,8 +7,8 @@ namespace TestGitHub.Models
         private string _Message;
         public string Message
         {
-            get => _Message;
-            set => RaisePropertyChangedIfSet(ref _Message, value, nameof(Message));
+            get => this._Message;
+            set => this.RaisePropertyChangedIfSet(ref this._Message, value, nameof(this.Message));
         }
     }
 }

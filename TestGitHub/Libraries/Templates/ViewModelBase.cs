@@ -18,30 +18,30 @@ namespace TestGitHub.Libraries.Templates
 
         protected ViewModelBase(TModel model)
         {
-            Model = model;
+            this.Model = model;
 
             // IWeakEventListenerを作成してEventManagerに渡す.
             // このときListenerのインスタンスは、フィールドなどで管理して
             // ViewModelがGCの対象になるまで破棄されないようにする.
-            propertyChangedListener = new PropertyChangedWeakEventListener(
-                    RaisePropertyChanged);
+            this.propertyChangedListener = new PropertyChangedWeakEventListener(
+                    this.RaisePropertyChanged);
 
             PropertyChangedEventManager.AddListener(
-                Model,
-                propertyChangedListener,
+                this.Model,
+                this.propertyChangedListener,
                 string.Empty);
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
 
             GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
@@ -51,11 +51,11 @@ namespace TestGitHub.Libraries.Templates
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、下のファイナライザーをオーバーライド.
                 // TODO: 大きなフィールドを null に設定.
                 PropertyChangedEventManager.RemoveListener(
-                    Model,
-                    propertyChangedListener,
+                    this.Model,
+                    this.propertyChangedListener,
                     string.Empty);
 
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -88,7 +88,7 @@ namespace TestGitHub.Libraries.Templates
                 }
 
                 // コンストラクタで渡されたコールバックを呼び出す
-                raisePropertyChangedAction(evt.PropertyName);
+                this.raisePropertyChangedAction(evt.PropertyName);
                 return true;
             }
         }

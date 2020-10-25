@@ -19,7 +19,7 @@ namespace TestGitHub.Views.Behaviors
         /// </summary>
         ~MainWindowBehavior()
         {
-            OnDetaching();
+            this.OnDetaching();
             Debug.WriteLine($"WindowBehavior {MethodBase.GetCurrentMethod().Name}");
         }
 
@@ -50,20 +50,20 @@ namespace TestGitHub.Views.Behaviors
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
-            AssociatedObject.Loaded += (o, e) =>
+            this.AssociatedObject.Loaded += (o, e) =>
             {
-                var source = HwndSource.FromHwnd(new WindowInteropHelper(AssociatedObject).Handle);
+                var source = HwndSource.FromHwnd(new WindowInteropHelper(this.AssociatedObject).Handle);
 
                 // var source = (HwndSource)HwndSource.FromVisual(this.AssociatedObject); // 汎用変換.
                 source.AddHook(new HwndSourceHook(WndProc));
 
                 Debug.WriteLine("WindowBehavior OnAttached");
-                if (AssociatedObject.DataContext != null)
+                if (this.AssociatedObject.DataContext != null)
                 {
-                    CommandDeviceChanged ??= ((IMainWindowBehavior)AssociatedObject.DataContext).CommandDeviceChanged;
-                    CommandSizeChanged ??= ((IMainWindowBehavior)AssociatedObject.DataContext).CommandSizeChanged;
-                    CommandLocationChanged ??= ((IMainWindowBehavior)AssociatedObject.DataContext).CommandLocationChanged;
-                    CommandClosed ??= ((IMainWindowBehavior)AssociatedObject.DataContext).CommandClosed;
+                    CommandDeviceChanged ??= ((IMainWindowBehavior)this.AssociatedObject.DataContext).CommandDeviceChanged;
+                    CommandSizeChanged ??= ((IMainWindowBehavior)this.AssociatedObject.DataContext).CommandSizeChanged;
+                    CommandLocationChanged ??= ((IMainWindowBehavior)this.AssociatedObject.DataContext).CommandLocationChanged;
+                    CommandClosed ??= ((IMainWindowBehavior)this.AssociatedObject.DataContext).CommandClosed;
                 }
             };
         }

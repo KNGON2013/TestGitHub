@@ -9,7 +9,7 @@ namespace TestGitHubMaterialDesign
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

@@ -18,37 +18,37 @@ namespace TestGitHub.ViewModels
 
         public MainWindowDataContext() : base(new MainWindow())
         {
-            model = Model;
+            this.model = this.Model;
         }
 
-        public string Title => model.Title;
+        public string Title => this.model.Title;
 
-        public IEnumerable<Item> Items => model.Items;
+        public IEnumerable<Item> Items => this.model.Items;
 
-        public bool IsBoolToValueConverter { get => model.IsBoolToValueConverter; set => model.IsBoolToValueConverter = value; }
+        public bool IsBoolToValueConverter { get => this.model.IsBoolToValueConverter; set => this.model.IsBoolToValueConverter = value; }
 
-        public ICommand CommandTestBoolToValueConverter => model.CommandTestBoolToValueConverter;
+        public ICommand CommandTestBoolToValueConverter => this.model.CommandTestBoolToValueConverter;
 
-        public ICommand CommandDeviceChanged => model.CommandDeviceChanged;
+        public ICommand CommandDeviceChanged => this.model.CommandDeviceChanged;
 
-        public ICommand CommandSizeChanged => model.CommandSizeChanged;
+        public ICommand CommandSizeChanged => this.model.CommandSizeChanged;
 
-        public ICommand CommandLocationChanged => model.CommandLocationChanged;
+        public ICommand CommandLocationChanged => this.model.CommandLocationChanged;
 
-        public ICommand CommandClosed => model.CommandClosed;
+        public ICommand CommandClosed => this.model.CommandClosed;
 
-        public string ViewSizeChanged => model.ViewSizeChanged;
+        public string ViewSizeChanged => this.model.ViewSizeChanged;
 
-        public string ViewLocationChanged => model.ViewLocationChanged;
+        public string ViewLocationChanged => this.model.ViewLocationChanged;
 
-        public int ValidationInteger { get => model.ValidationInteger; set => model.ValidationInteger = value; }
+        public int ValidationInteger { get => this.model.ValidationInteger; set => this.model.ValidationInteger = value; }
 
-        public double ValidationDouble { get => model.ValidationDouble; set => model.ValidationDouble = value; }
+        public double ValidationDouble { get => this.model.ValidationDouble; set => this.model.ValidationDouble = value; }
 
-        public BitmapSource ImageBitmapSource => model.ImageBitmapSource;
+        public BitmapSource ImageBitmapSource => this.model.ImageBitmapSource;
 
         private ICommand _CommandTestDialog;
-        public ICommand CommandTestDialog => _CommandTestDialog ??= new RelayCommand(() =>
+        public ICommand CommandTestDialog => this._CommandTestDialog ??= new RelayCommand(() =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
             var result = DialogService.Show("Title", "message");
@@ -57,7 +57,7 @@ namespace TestGitHub.ViewModels
         });
 
         private ICommand _CommandTestFolder;
-        public ICommand CommandTestFolder => _CommandTestFolder ??= new RelayCommand(() =>
+        public ICommand CommandTestFolder => this._CommandTestFolder ??= new RelayCommand(() =>
         {
             Debug.WriteLine(MethodBase.GetCurrentMethod().Name);
 
@@ -74,13 +74,13 @@ namespace TestGitHub.ViewModels
             Debug.WriteLine(dialog.FileName);
         });
 
-        public bool EnableCommand => model.EnableCommand;
+        public bool EnableCommand => this.model.EnableCommand;
 
-        public ICommand CommandAdd => model.CommandAdd;
+        public ICommand CommandAdd => this.model.CommandAdd;
 
-        public ICommand CommandRun => model.CommandRun;
+        public ICommand CommandRun => this.model.CommandRun;
 
-        public ICommand CommandCancel => model.CommandCancel;
+        public ICommand CommandCancel => this.model.CommandCancel;
 
         /// <summary>
         /// マウスホイール.
@@ -107,7 +107,7 @@ namespace TestGitHub.ViewModels
         /// <param name="e">EventArgs.</param>
         public void IsAllowedUnsignedInput(object sender, TextCompositionEventArgs e)
         {
-            IsAllowed(sender as TextBox, e, new Regex("[^0-9]+"));
+            this.IsAllowed(sender as TextBox, e, new Regex("[^0-9]+"));
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace TestGitHub.ViewModels
         /// <param name="e">EventArgs.</param>
         public void IsAllowedNumericalInput(object sender, TextCompositionEventArgs e)
         {
-            IsAllowed(sender as TextBox, e, new Regex("[^0-9.-]+"));
+            this.IsAllowed(sender as TextBox, e, new Regex("[^0-9.-]+"));
         }
 
         /// <summary>
