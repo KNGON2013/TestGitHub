@@ -49,7 +49,8 @@ namespace TestGitHub.Models
             var path = Environment.CurrentDirectory + "\\Lenna.jpg";
             if (File.Exists(path))
             {
-                var bitmap = new Bitmap(Image.FromFile(path));
+                var bitmap = new Bitmap(Properties.Resources.Lenna);
+                // var bitmap = new Bitmap(Image.FromFile(path));
                 this.ImageBitmapSource = BitmapSourceConverter.ToBetterBitmapSource(bitmap);
 
                 this.bitmapBGRA32 = BitmapSourceConverter.ToBytesBGRA32(this._ImageBitmapSource);
